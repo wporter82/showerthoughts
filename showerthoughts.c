@@ -3,8 +3,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <curl/curl.h>
-
-/* https://github.com/json-c/json-c.git */
 #include <json-c/json.h>
 
 struct curl_fetch_st {
@@ -40,7 +38,7 @@ CURLcode curl_fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch)
 	CURLcode rcode;
 	fetch->payload = (char *)calloc(1, sizeof(fetch->payload));
 
-	if(fetch->payload = NULL) {
+	if(fetch->payload == NULL) {
 		fprintf(stderr, "Error: Faild to allocate payload in curl_fetch_url");
 		return CURLE_FAILED_INIT;
 	}
@@ -73,12 +71,12 @@ int rand_lim(int limit) {
 
 }
 
-int main(int argc, char *argv)
+int main(int argc, char **argv)
 {
 	CURL *ch;
 	CURLcode rcode;
 
-	json_object *json;
+	struct json_object *json;
 	enum json_tokener_error jerr = json_tokener_success;
 
 	struct curl_fetch_st curl_fetch;
@@ -133,11 +131,12 @@ int main(int argc, char *argv)
 		return 4;
 	}
 
+	/* Drill down to the nodes that have what we want */
 	json_object_object_get_ex(json, "data", &tmp);
 	json_object_object_get_ex(tmp, "children", &tmparr);
 
+	/* Fill an array with thoughts */
 	const char *titles[json_object_array_length(tmparr)];
-
 	tmp = json_object_new_object();
 	for(i = 0; i < json_object_array_length(tmparr); i++) {
 		tmp = json_object_array_get_idx(tmparr, i);
@@ -149,6 +148,7 @@ int main(int argc, char *argv)
 		titles[i] = title;
 	}
 
+	/* Pick 1 to print out to the screen */
 	printf("%s\n", titles[rand_lim(json_object_array_length(tmparr))]);
 
 	return 0;
