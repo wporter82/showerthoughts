@@ -10,6 +10,27 @@ struct curl_fetch_st {
 	size_t size;
 };
 
+const char * unescape(const char *original) {
+	char *result;
+	char *temp;
+
+	/* Make a copy of the original string */
+	result = strdup(original);
+
+	/* Remove the quotes from the beginning and end */
+	memmove(result, result+1, strlen(result));
+	result[strlen(result)-1] = 0;
+
+	temp = strchr(result, '\\');
+
+	while(temp) {
+		strcpy(temp, temp + 1);
+		temp = strchr(result, '\\');
+	}
+
+	return result;
+}
+
 size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
 	/* calculate buffer size */
@@ -149,7 +170,7 @@ int main(int argc, char **argv)
 	}
 
 	/* Pick 1 to print out to the screen */
-	printf("%s\n", titles[rand_lim(json_object_array_length(tmparr))]);
+	printf("%s\n", unescape(titles[rand_lim(json_object_array_length(tmparr))]));
 
 	return 0;
 }
