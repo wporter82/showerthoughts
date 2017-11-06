@@ -81,7 +81,7 @@ CURLcode curl_fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch)
 /* return a random number between 0 and limit inclusive. */
 int rand_lim(int limit) {
 	srand(time(NULL));
-	int divisor = RAND_MAX/(limit+1);
+	int divisor = RAND_MAX/(limit);
 	int retval;
 
 	do {
