@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	int i;
 	const char *title;
 
-	char *url = "http://www.reddit.com/r/showerthoughts/hot.json?limit=100";
+	char *url = "https://www.reddit.com/r/showerthoughts/hot.json?limit=100";
 
 	if((ch = curl_easy_init()) == NULL) {
 		fprintf(stderr, "Error: Failed to create curl handle in fetch_session");
