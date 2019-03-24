@@ -10,16 +10,12 @@ struct curl_fetch_st {
 	size_t size;
 };
 
-const char * unescape(const char *original) {
+char *unescape(const char *original) {
 	char *result;
 	char *temp;
 
-	/* Make a copy of the original string */
-	result = strdup(original);
-
 	/* Remove the quotes from the beginning and end */
-	memmove(result, result+1, strlen(result));
-	result[strlen(result)-1] = 0;
+	result = strndup(original+1, strlen(original)-2);
 
 	temp = strchr(result, '\\');
 
@@ -108,7 +104,7 @@ int main(int argc, char **argv)
 	struct json_object *tmp2;
 	struct json_object *tmparr;
 	int i;
-	const char *title;
+	char *title;
 
 	char *url = "https://www.reddit.com/r/showerthoughts/hot.json?limit=100";
 
@@ -120,8 +116,6 @@ int main(int argc, char **argv)
 	headers = curl_slist_append(headers, "Accept: application/json");
 	headers = curl_slist_append(headers, "Content-Type: application/json");
 
-	json = json_object_new_object();
-
 	curl_easy_setopt(ch, CURLOPT_CUSTOMREQUEST, "GET");
 	curl_easy_setopt(ch, CURLOPT_HTTPHEADER, headers);
 
@@ -129,7 +123,6 @@ int main(int argc, char **argv)
 
 	curl_easy_cleanup(ch);
 	curl_slist_free_all(headers);
-	json_object_put(json);
 
 	if(rcode != CURLE_OK || cf->size < 1) {
 		fprintf(stderr, "Error: Failed to fetch url (%s) - curl said: %s",
@@ -137,15 +130,13 @@ int main(int argc, char **argv)
 		return 2;
 	}
 
-	if(cf->payload != NULL) {
-		json = json_tokener_parse_verbose(cf->payload, &jerr);
-		free(cf->payload);
-	} else {
+	if(cf->payload == NULL) {
 		fprintf(stderr, "Error: Failed to populate payload");
-		free(cf->payload);
 		return 3;
 	}
 
+	json = json_tokener_parse_verbose(cf->payload, &jerr);
+	free(cf->payload);
 	if(jerr != json_tokener_success) {
 		fprintf(stderr, "Error: Failed to parse json string");
 		json_object_put(json);
@@ -158,19 +149,20 @@ int main(int argc, char **argv)
 
 	/* Fill an array with thoughts */
 	const char *titles[json_object_array_length(tmparr)];
-	tmp = json_object_new_object();
 	for(i = 0; i < json_object_array_length(tmparr); i++) {
 		tmp = json_object_array_get_idx(tmparr, i);
 		json_object_object_get_ex(tmp, "data", &tmp2);
 		json_object_object_get_ex(tmp2, "title", &tmp2);
 
-		title = json_object_to_json_string(tmp2);
-
-		titles[i] = title;
+		titles[i] = json_object_to_json_string(tmp2);
 	}
 
 	/* Pick 1 to print out to the screen */
-	printf("%s\n", unescape(titles[rand_lim(json_object_array_length(tmparr))]));
+	title = unescape(titles[rand_lim(json_object_array_length(tmparr))]);
+	printf("%s\n", title);
+	free(title);
+
+	json_object_put(json);
 
 	return 0;
 }
