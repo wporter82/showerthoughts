@@ -140,18 +140,12 @@ int main(int argc, char **argv)
 	json_object_object_get_ex(json, "data", &tmp);
 	json_object_object_get_ex(tmp, "children", &tmparr);
 
-	/* Fill an array with thoughts */
-	const char *titles[json_object_array_length(tmparr)];
-	for(i = 0; i < json_object_array_length(tmparr); i++) {
-		tmp = json_object_array_get_idx(tmparr, i);
-		json_object_object_get_ex(tmp, "data", &tmp2);
-		json_object_object_get_ex(tmp2, "title", &tmp2);
-
-		titles[i] = json_object_to_json_string(tmp2);
-	}
-
-	/* Pick 1 to print out to the screen */
-	title = unescape(titles[rand_lim(json_object_array_length(tmparr))]);
+	/* Pick 1 thought to print out to the screen */
+	i = rand_lim(json_object_array_length(tmparr));
+	tmp = json_object_array_get_idx(tmparr, i);
+	json_object_object_get_ex(tmp, "data", &tmp2);
+	json_object_object_get_ex(tmp2, "title", &tmp2);
+	title = unescape(json_object_to_json_string(tmp2));
 	printf("%s\n", title);
 	free(title);
 
