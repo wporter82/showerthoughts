@@ -74,18 +74,9 @@ CURLcode curl_fetch_url(CURL *ch, const char *url, struct curl_fetch_st *fetch)
 	return rcode;
 }
 
-/* return a random number between 0 and limit inclusive. */
+/* Return a random number between 0 and limit-1 */
 int rand_lim(int limit) {
-	srand(time(NULL));
-	int divisor = RAND_MAX/(limit);
-	int retval;
-
-	do {
-		retval = rand() / divisor;
-	} while (retval > limit);
-
-	return retval;
-
+	return rand() / (RAND_MAX / limit + 1);
 }
 
 int main(int argc, char **argv)
@@ -107,6 +98,8 @@ int main(int argc, char **argv)
 	char *title;
 
 	char *url = "https://www.reddit.com/r/showerthoughts/hot.json?limit=100";
+
+	srand(time(NULL));
 
 	if((ch = curl_easy_init()) == NULL) {
 		fprintf(stderr, "Error: Failed to create curl handle in fetch_session");
