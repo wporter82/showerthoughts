@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
@@ -99,7 +100,7 @@ int main(int argc, char **argv)
 
 	char *url = "https://www.reddit.com/r/showerthoughts/hot.json?limit=100";
 
-	srand(time(NULL));
+	srand( (unsigned) time(NULL) * getpid());
 
 	if((ch = curl_easy_init()) == NULL) {
 		fprintf(stderr, "Error: Failed to create curl handle in fetch_session");
