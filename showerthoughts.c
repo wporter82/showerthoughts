@@ -21,7 +21,7 @@ char *unescape(const char *original) {
 	temp = strchr(result, '\\');
 
 	while(temp) {
-		strcpy(temp, temp + 1);
+		memmove(temp, temp + 1, strlen(temp)+1);
 		temp = strchr(result, '\\');
 	}
 
