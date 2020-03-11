@@ -13,21 +13,25 @@ Before invoking `make`, install them as follows:
 
 * Debian
   ```shell
-  sudo apt install libcurl3-dev libjson-c-dev
+  $ sudo apt install libcurl3-dev libjson-c-dev
   ```
 
 * Fedora
   ```shell
-  sudo dnf install libcurl-devel json-c-devel
+  $ sudo dnf install libcurl-devel json-c-devel
   ```
 
-## Installing
+```shell
+$ ./autogen.sh
+$ ./configure
+$ make && make install
+```
+
+## Usage
 
 To get a showerthought displayed at each start of an interactive login shell, execute these statements:
 
 ```shell
-install showerthoughts $HOME/.local/bin
-
 cat <<'END' >>$HOME/.bash_profile
 if [[ -n $PS1 ]]; then
 	if hash cowsay 2>/dev/null; then
@@ -38,6 +42,4 @@ if [[ -n $PS1 ]]; then
 fi
 END
 ```
-
-And make sure `$HOME/.local/bin` is in `$PATH`.
 
