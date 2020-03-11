@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 	int i;
 	char *title;
 
-	char *url = "https://www.reddit.com/r/showerthoughts/hot.json?limit=100";
+	char *url = "https://www.reddit.com/r/showerthoughts/hot.json?limit=200";
 
 	srand( (unsigned) time(NULL) * getpid());
 
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 
 	/* Pick 1 thought to print out to the screen */
 	i = rand_lim(json_object_array_length(tmparr));
-	tmp = json_object_array_get_idx(tmparr, i);
+	tmp = json_object_array_get_idx(tmparr, i + 1);
 	json_object_object_get_ex(tmp, "data", &tmp2);
 	json_object_object_get_ex(tmp2, "title", &tmp2);
 	title = unescape(json_object_to_json_string(tmp2));
