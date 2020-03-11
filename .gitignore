@@ -17,6 +17,6 @@ m4/
 Makefile
 Makefile.in
 missing
-showerthoughts-*.tar.xz
+showerthoughts-*.tar.gz
 showerthoughts
 *.exe
