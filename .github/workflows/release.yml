@@ -22,7 +22,6 @@ jobs:
     - name: Test distribution
       run: make distcheck
     - name: Set Version
-      # run: ST_VERSION=$(cat .version) && echo $ST_VERSION
       run: echo ::set-env name=ST_VERSION::$(cat .version)
     - name: Create Release
       id: create_release
