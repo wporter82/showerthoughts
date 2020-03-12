@@ -1,5 +1,5 @@
 # showerthoughts
-![C/C++ CI](https://github.com/wporter82/showerthoughts/workflows/C/C++%20CI/badge.svg) ![Current Release](https://github.com/wporter82/showerthoughts/workflows/Create%20Release/badge.svg)
+![C/C++ CI](https://github.com/wporter82/showerthoughts/workflows/C/C++%20CI/badge.svg) ![Current Release](https://github.com/wporter82/showerthoughts/workflows/Current%20Release/badge.svg)
 
 Prints out a random entry from the "hot" category of the [subreddit of the same name](https://www.reddit.com/r/showerthoughts/hot/).
 
