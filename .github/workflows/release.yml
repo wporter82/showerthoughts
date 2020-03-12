@@ -22,7 +22,7 @@ jobs:
     - name: Test distribution
       run: make distcheck
     - name: Set Version
-      run: ST_VERSION=$(cat .version) && echo ST_VERSION
+      run: ST_VERSION=$(cat .version) && echo $ST_VERSION
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
